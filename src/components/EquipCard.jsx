@@ -1,25 +1,9 @@
 import { Link } from "react-router";
 
-export default function ProductCard({ product }) {
-  const handleEquip = () => {
-    const newProduct = {
-      name: product.name,
-      price: product.price,
-      category: product.category,
-      description: product.description,
-      stock: product.stock,
-      rating: product.rating,
-      extraItem: product.extraItem,
-      deliveryTime: product.deliveryTime,
-      photo: product.photo,
-    };
-
-    fetch("http://localhost:5000/equip", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(newProduct),
+export default function EquipCard({ product }) {
+  const handleDeleteCard = () => {
+    fetch(`http://localhost:5000/equip/${product._id}`, {
+      method: "DELETE",
     })
       .then((res) => res.json())
       .then((data) => console.log(data));
@@ -74,16 +58,17 @@ export default function ProductCard({ product }) {
         </div>
 
         {/* Action Button */}
-        <Link to={`/details/${product._id}`}>
+        <Link to={`/edit_equip_product/${product._id}`}>
           <button className="w-full mt-3 bg-blue-600 text-white font-medium py-2 rounded-lg hover:bg-blue-700 transition">
-            Details
+            Edit
           </button>
         </Link>
+
         <button
-          onClick={handleEquip}
+          onClick={handleDeleteCard}
           className="w-full mt-3 bg-blue-600 text-white font-medium py-2 rounded-lg hover:bg-blue-700 transition"
         >
-          Equip
+          Delete
         </button>
       </div>
     </div>

@@ -1,7 +1,10 @@
-import { useState } from "react";
-import { useNavigate } from "react-router";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router";
 
-export default function AddEquipmentPage() {
+export default function EditEquipProductPage() {
+  const { id } = useParams();
+  const navigate = useNavigate();
+
   const [product, setProduct] = useState({
     name: "",
     price: "",
@@ -13,7 +16,6 @@ export default function AddEquipmentPage() {
     deliveryTime: "",
     photo: "",
   });
-  const navigate = useNavigate();
 
   const handleChange = (event) => {
     const name = event.target.name;
@@ -30,9 +32,8 @@ export default function AddEquipmentPage() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-
-    fetch("http://localhost:5000/product", {
-      method: "POST",
+    fetch(`http://localhost:5000/equip/edit/${id}`, {
+      method: "PATCH",
       headers: {
         "Content-Type": "application/json",
       },
@@ -52,14 +53,24 @@ export default function AddEquipmentPage() {
           deliveryTime: "",
           photo: "",
         });
-        navigate("/products");
+        navigate("/my_products");
       });
   };
+
+  useEffect(() => {
+    fetch(`http://localhost:5000/equip/${id}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setProduct(data);
+      })
+      .catch((error) => console.log(error));
+  }, [id]);
+
   return (
-    <div className="bg-white py-10">
+    <div>
       <div className="container mx-auto mt-10 bg-gray-300 px-10 py-8 rounded-sm">
         <h2 className="text-3xl font-semibold text-center my-5 text-gray-800">
-          Add Your Equipment
+          Edit Your Equipment
         </h2>
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Two Column Layout - Responsive */}
@@ -199,7 +210,7 @@ export default function AddEquipmentPage() {
             type="submit"
             className="bg-[#D2B48C] w-full py-3 text-black font-semibold mt-3 rounded-sm cursor-pointer text-lg hover:bg-[#c1a178] transition-colors"
           >
-            Add Product
+            Complete Edit
           </button>
         </form>
       </div>

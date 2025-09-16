@@ -92,7 +92,7 @@ export default function ProductDetails() {
 
             {/* Add to Cart Button */}
             <button className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-lg text-lg transition-all shadow-md hover:shadow-xl mt-4">
-              Add to Cart
+              Equip
             </button>
           </div>
         </div>
