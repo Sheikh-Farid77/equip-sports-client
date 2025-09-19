@@ -1,84 +1,117 @@
-import { Link } from "react-router";
+import { NavLink, useNavigate } from "react-router";
 import Logo from "../assets/EquipSports Logo Design.png";
 import BarIcon from "./svg/BarIcon";
 import { useAuth } from "../provider/AuthProvider";
+import { Link } from "react-router";
 
 export default function Nav() {
-  const { authInfo } = useAuth();
+  const { authInfo, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      navigate("/login");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // Reusable class for NavLink
+  const navLinkClass = ({ isActive }) =>
+    `transition-colors ${
+      isActive ? "text-red-500 font-semibold" : "hover:text-red-400"
+    }`;
+
   return (
-    <div className="navbar bg-gray-300 shadow-sm text-gray-800">
-      <div className="navbar-start">
-        <div className="dropdown">
-          <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
-            <BarIcon />
+    <nav className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 shadow-md text-white sticky top-0 z-50">
+      <div className="container mx-auto px-4 py-2 flex items-center justify-between">
+        {/* Logo + Mobile Menu */}
+        <div className="flex items-center gap-3">
+          <div className="dropdown lg:hidden">
+            <button
+              tabIndex={0}
+              role="button"
+              className="p-2 rounded-md hover:bg-gray-700 focus:outline-none"
+            >
+              <BarIcon />
+            </button>
+            <ul
+              tabIndex={0}
+              className="menu menu-sm dropdown-content bg-gray-800 rounded-lg z-10 mt-3 w-56 p-2 shadow-lg text-white"
+            >
+              <li>
+                <NavLink to="/" className={navLinkClass}>
+                  Home
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/products" className={navLinkClass}>
+                  All Equipment
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/my_products" className={navLinkClass}>
+                  My Equipment
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/add_equipment" className={navLinkClass}>
+                  Add Equipment
+                </NavLink>
+              </li>
+            </ul>
           </div>
-          <ul
-            tabIndex={0}
-            className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
-          >
-            <li>
-              <Link to="/">Home</Link>
-            </li>
-            <li>
-              <Link to="/products">All Equipment</Link>
-            </li>
-            <li>
-              <Link to="/my_products">My Equipment</Link>
-            </li>
-
-            <li>
-              <Link to="/add_equipment">Add Equipment</Link>
-            </li>
-          </ul>
+          <NavLink to="/">
+            <img
+              src={Logo}
+              alt="logo"
+              className="h-12 w-12 lg:h-16 lg:w-16 object-contain"
+            />
+          </NavLink>
         </div>
-        <Link to="/">
-          <img src={Logo} alt="logo" className="h-14 w-14 lg:w-20 lg:h-20" />
-        </Link>
-      </div>
-      <div className="navbar-center hidden lg:flex">
-        <ul className="menu menu-horizontal px-1">
-          <li>
-            <Link to="/">Home</Link>
-          </li>
-          <li>
-            <Link to="/products">All Equipment</Link>
-          </li>
-          <li>
-            <Link to="/my_products">My Equipment</Link>
-          </li>
-          <li>
-            <Link to="/add_equipment">Add Equipment</Link>
-          </li>
-        </ul>
-      </div>
-      <div className="navbar-end">
-       <div className="flex items-center gap-3 flex-wrap sm:flex-nowrap">
-  {authInfo ? (
-    <>
-      {/* User photo */}
-      <img
-        className="h-12 w-12 sm:h-16 sm:w-16 border-2 border-red-600 rounded-full object-cover"
-        src={authInfo.photo}
-        alt={authInfo.name}
-      />
 
-      {/* Logout button */}
-      <button className="px-3 sm:px-4 py-2 text-base sm:text-lg font-semibold rounded-md bg-gray-700 text-gray-300 hover:bg-gray-600 transition-colors w-full sm:w-auto cursor-pointer">
-        Logout
-      </button>
-    </>
-  ) : (
-    <>
-      <Link to="/login" className="w-full sm:w-auto">
-        <button className="px-3 sm:px-4 py-2 text-base sm:text-lg font-semibold rounded-md bg-gray-700 text-gray-300 hover:bg-gray-600 transition-colors w-full sm:w-auto cursor-pointer">
-          Login
-        </button>
-      </Link>
-    </>
-  )}
-</div>
+        {/* Desktop Menu */}
+        <div className="hidden lg:flex space-x-8 text-lg font-medium">
+          <NavLink to="/" className={navLinkClass}>
+            Home
+          </NavLink>
+          <NavLink to="/products" className={navLinkClass}>
+            All Equipment
+          </NavLink>
+          <NavLink to="/my_products" className={navLinkClass}>
+            My Equipment
+          </NavLink>
+          <NavLink to="/add_equipment" className={navLinkClass}>
+            Add Equipment
+          </NavLink>
+        </div>
 
+        {/* Auth Section */}
+        <div className="flex items-center gap-4">
+          {authInfo ? (
+            <>
+              <img
+                className="h-10 w-10 sm:h-12 sm:w-12 border-2 border-red-500 rounded-full object-cover shadow-md"
+                src={authInfo.photo}
+                alt={authInfo.name}
+              />
+              <button
+                onClick={handleLogout}
+                className="px-4 py-2 text-sm sm:text-base font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 transition-colors shadow-md"
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            <Link to="/login">
+              <button className="px-4 py-2 text-sm sm:text-base font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 transition-colors shadow-md">
+                Login
+              </button>
+            </Link>
+          )}
+        </div>
       </div>
-    </div>
+    </nav>
   );
 }

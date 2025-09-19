@@ -24,67 +24,64 @@ export default function ProductCard({ product }) {
       .then((res) => res.json())
       .then((data) => console.log(data));
   };
+
   return (
-    <div className="max-w-sm bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition duration-300">
+    <div className="max-w-xs bg-white rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden">
       {/* Image */}
       <img
-        className="w-full max-h-64 object-cover rounded-t-2xl"
+        className="w-full h-40 sm:h-48 object-cover rounded-t-xl"
         src={product.photo}
-        alt="Product"
+        alt={product.name}
       />
 
       {/* Content */}
-      <div className="p-5 space-y-3">
-        {/* Item Name + Category */}
+      <div className="p-4 space-y-2">
+        {/* Name + Category */}
         <div>
-          <h2 className="text-xl font-bold text-gray-800">{product?.name}</h2>
-          <p className="text-sm text-gray-500">{product?.category}</p>
+          <h2 className="text-lg sm:text-xl font-semibold text-gray-800 truncate">
+            {product.name}
+          </h2>
+          <p className="text-xs sm:text-sm text-gray-500">{product.category}</p>
         </div>
 
         {/* Price + Rating */}
-        <div className="flex items-center justify-between">
-          <span className="text-lg font-semibold text-green-600">
-            ${product?.price}
-          </span>
-          <span className="text-yellow-500 font-medium">
-            ⭐ {product?.rating}
-          </span>
+        <div className="flex items-center justify-between text-sm sm:text-base font-medium">
+          <span className="text-green-600">${product.price}</span>
+          <span className="text-yellow-500">⭐ {product.rating}</span>
         </div>
 
         {/* Customization */}
-        <div>
-          <h3 className="font-medium text-gray-800">Customization:</h3>
-          {product?.extraItem.map((item) => (
-            <span key={item} className="text-sm text-gray-600">
-              {item},
-            </span>
-          ))}
+        {product.extraItem?.length > 0 && (
+          <div className="text-xs sm:text-sm text-gray-600">
+            <span className="font-medium text-gray-800">Customization: </span>
+            {product.extraItem.join(", ")}
+          </div>
+        )}
+
+        {/* Delivery + Stock */}
+        <div className="flex justify-between text-xs sm:text-sm text-gray-600">
+          <span>
+            <span className="font-medium text-gray-800">Delivery:</span> {product.deliveryTime}d
+          </span>
+          <span>
+            <span className="font-medium text-gray-800">Stock:</span> {product.stock}
+          </span>
         </div>
 
-        {/* Processing Time */}
-        <div>
-          <h3 className="font-medium text-gray-800">Delivery Time:</h3>
-          <p className="text-sm text-gray-600">{product?.deliveryTime} Days</p>
-        </div>
-
-        {/* Stock Status */}
-        <div>
-          <h3 className="font-medium text-gray-800">Stock Status:</h3>
-          <p className="text-sm text-gray-600">{product?.stock}</p>
-        </div>
-
-        {/* Action Button */}
-        <Link to={`/details/${product._id}`}>
-          <button className="w-full mt-3 bg-blue-600 text-white font-medium py-2 rounded-lg hover:bg-blue-700 transition">
-            Details
+        {/* Buttons */}
+        <div className="flex flex-col gap-2 mt-2">
+          <Link to={`/details/${product._id}`}>
+            <button className="w-full py-2 text-sm sm:text-base font-medium rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition">
+              Details
+            </button>
+          </Link>
+          <button
+            onClick={handleEquip}
+            className="w-full py-2 text-sm sm:text-base font-medium rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition"
+          >
+            Equip
           </button>
-        </Link>
-        <button
-          onClick={handleEquip}
-          className="w-full mt-3 bg-blue-600 text-white font-medium py-2 rounded-lg hover:bg-blue-700 transition"
-        >
-          Equip
-        </button>
+        </div>
       </div>
     </div>
   );
