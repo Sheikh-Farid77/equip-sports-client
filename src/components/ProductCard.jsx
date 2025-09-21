@@ -1,9 +1,14 @@
 import { Link } from "react-router";
+import { useAuth } from "../provider/AuthProvider";
 
 export default function ProductCard({ product }) {
+
+  const {authInfo} = useAuth();
   const handleEquip = () => {
     const newProduct = {
       name: product.name,
+      email: authInfo.email,
+      id: product._id,
       price: product.price,
       category: product.category,
       description: product.description,

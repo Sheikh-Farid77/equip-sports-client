@@ -11,8 +11,6 @@ import {
 
 export default function AuthProvider({ children }) {
   const [authInfo, setAuthInfo] = useState(null);
-  console.log(authInfo)
-
   const registerWithEmailAndPassword = async (email, password, userInfo) => {
     try {
       const res = await createUserWithEmailAndPassword(auth, email, password);

@@ -4,13 +4,14 @@ import { IoIosEyeOff } from "react-icons/io";
 import { Link, useNavigate } from "react-router";
 import { useAuth } from "../provider/AuthProvider";
 
-export default function LoginPage(){
-    const [open, setOpen] = useState(false);
+
+export default function LoginPage() {
+  const [open, setOpen] = useState(false);
   const [userInfo, setUserInfo] = useState({
     email: "",
     password: "",
   });
-  const {loginWithEmailAndPassword} = useAuth();
+  const { loginWithEmailAndPassword } = useAuth();
 
   const navigate = useNavigate();
 
@@ -21,20 +22,19 @@ export default function LoginPage(){
     });
   };
 
-  const handleSubmit = async(event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     try {
       await loginWithEmailAndPassword(userInfo.email, userInfo.password);
-      navigate('/')
-      
+          navigate("/"); 
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
+  };
 
-  }
-    return (
-         <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-100 via-gray-200 to-gray-300 px-4">
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-100 via-gray-200 to-gray-300 px-4">
       <div className="card w-full max-w-md bg-white shadow-2xl rounded-2xl overflow-hidden">
         <div className="card-body p-8">
           <h1 className="text-center font-extrabold text-4xl text-gray-800 mb-6">
@@ -120,5 +120,5 @@ export default function LoginPage(){
         </div>
       </div>
     </div>
-    );
+  );
 }
